@@ -48,6 +48,8 @@ int main()
         Graphics::draw();
         glfwSwapBuffers(window);
         glfwPollEvents();
+        Context::rotate(0.01f);
+        Context::update();
     }
 
     // optional: de-allocate all resources once they've outlived their purpose:

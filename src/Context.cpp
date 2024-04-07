@@ -11,6 +11,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include "Context.hpp"
 #include "Listener.hpp"
+#include "PerspectiveCamera.hpp"
 
 namespace Context {
 
@@ -40,6 +41,10 @@ struct Frame {
     return m;
   }
 } frame;
+
+PerspectiveCamera camera{};
+
+float time;
 
 GLFWwindow* init()
 {
@@ -88,10 +93,12 @@ void processInput(GLFWwindow *window)
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    glViewport(0, 0, width, height);
-    frame.w = static_cast<float>(width);
-    frame.h = static_cast<float>(height);
-    Graphics::update_camera(frame.world_to_graphics());
+    // glViewport(0, 0, width, height);
+    // frame.w = static_cast<float>(width);
+    // frame.h = static_cast<float>(height);
+    // camera.setAspect(frame.w / frame.h);
+    // Graphics::update_camera(frame.world_to_graphics());
+    Graphics::update_camera(camera.getMatrix());
 }
 
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -147,6 +154,14 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+}
+
+void rotate(float angle) {
+  camera.rotate(angle);
+}
+
+void update() {
+  Graphics::update_camera(camera.getMatrix());
 }
 
 }

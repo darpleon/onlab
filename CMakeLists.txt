@@ -10,6 +10,7 @@ add_executable(
   src/PHPlanarQuintic.cpp
   src/glad.c
   src/PHDemo.cpp
+  src/PerspectiveCamera.cpp
 )
 include_directories(src)
 target_link_libraries(main glfw)

@@ -15,4 +15,8 @@ void processInput(GLFWwindow *window);
 
 void add_listener(Listener* listener);
 
+void update();
+
+void rotate(float angle);
+
 }
