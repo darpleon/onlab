@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <glm/ext/vector_float2.hpp>
 
-class Listener{
+class Listener {
 public:
   virtual bool key_pressed(int key, int mods)
   {

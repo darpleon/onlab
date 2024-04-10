@@ -18,6 +18,7 @@ namespace Context {
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void cursor_position_callback(GLFWwindow* window, double xpos, double ypos);
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
 struct Frame {
   glm::vec2 center{0.0f, 0.0f};
@@ -45,6 +46,8 @@ struct Frame {
 PerspectiveCamera camera{};
 
 float time;
+
+glm::vec2 prev;
 
 GLFWwindow* init()
 {
@@ -74,6 +77,8 @@ GLFWwindow* init()
 
     glfwSetKeyCallback(window, key_callback);
 
+    glfwSetScrollCallback(window, scroll_callback);
+
     return window;
 }
 
@@ -93,10 +98,10 @@ void processInput(GLFWwindow *window)
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-    // glViewport(0, 0, width, height);
-    // frame.w = static_cast<float>(width);
-    // frame.h = static_cast<float>(height);
-    // camera.setAspect(frame.w / frame.h);
+    glViewport(0, 0, width, height);
+    frame.w = static_cast<float>(width);
+    frame.h = static_cast<float>(height);
+    camera.setAspect(frame.w / frame.h);
     // Graphics::update_camera(frame.world_to_graphics());
     Graphics::update_camera(camera.getMatrix());
 }
@@ -107,36 +112,33 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
   glfwGetCursorPos(window, &xd, &yd);
   float x = static_cast<float>(xd);
   float y = static_cast<float>(yd);
-  glm::vec4 world_position = frame.window_to_world() * glm::vec4{x, y, 1.0f, 1.0f};
-  glm::vec4 test = frame.window_to_world() * glm::vec4{17.0f, -1.0f, 1.0f, 1.0f};
-  glm::vec2 position{world_position.x, world_position.y};
-  glm::vec2 testpos{test.x, test.y};
+  // glm::vec4 world_position = frame.window_to_world() * glm::vec4{x, y, 1.0f, 1.0f};
+  // glm::vec2 position{world_position.x, world_position.y};
+  glm::vec2 pos{x, y};
   if (action == GLFW_PRESS) {
-    // std::cout << std::format("window size ({}, {})\n", frame.w, frame.h);
-    // std::cout << std::format("screen ({}, {})\n", xd, yd);
-    // std::cout << std::format("world ({}, {})\n", position.x, position.y);
-    // std::cout << std::format("test ({}, {})\n", test.x, test.y);
-    for (Listener* listener : listeners)
-    {
-      if (listener->mouse_button_pressed(button, position))
-      {
-        release_listeners.push_back(listener);
-        break;
-      }
-    }
+    camera.mouse_button_pressed(button, pos);
+    // for (Listener* listener : listeners)
+    // {
+    //   if (listener->mouse_button_pressed(button, position))
+    //   {
+    //     release_listeners.push_back(listener);
+    //     break;
+    //   }
+    // }
   }
   else if (action == GLFW_RELEASE) {
-    std::vector<Listener*> remove;
-    for (Listener* listener : release_listeners)
-    {
-      if (listener->mouse_button_released(button, position)){
-        remove.push_back(listener);
-      }
-    }
-    for (Listener* listener : remove)
-    {
-      std::erase(release_listeners, listener);
-    }
+    camera.mouse_button_released(button, pos);
+    // std::vector<Listener*> remove;
+    // for (Listener* listener : release_listeners)
+    // {
+    //   if (listener->mouse_button_released(button, position)){
+    //     remove.push_back(listener);
+    //   }
+    // }
+    // for (Listener* listener : remove)
+    // {
+    //   std::erase(release_listeners, listener);
+    // }
   }
 }
 
@@ -144,20 +146,28 @@ void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
 {
   float x = static_cast<float>(xpos);
   float y = static_cast<float>(ypos);
-  glm::vec4 world_position = frame.window_to_world() * glm::vec4{x, y, 1.0f, 1.0f};
-  glm::vec2 position{world_position.x, world_position.y};
-  for (Listener* listener : release_listeners)
-  {
-    listener->cursor_position_changed(position);
-  }
+  glm::vec2 pos{x, y};
+  camera.cursor_position_changed(pos);
+  // glm::vec2 diff = glm::vec2{x, y} - prev;
+  // if (dragging) {
+  //   camera.rotate(diff.x * 0.01f);
+  // }
+  // glm::vec4 world_position = frame.window_to_world() * glm::vec4{x, y, 1.0f, 1.0f};
+  // glm::vec2 position{world_position.x, world_position.y};
+  // for (Listener* listener : release_listeners)
+  // {
+  //   listener->cursor_position_changed(position);
+  // }
+  prev = glm::vec2{x, y};
 }
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
 }
 
-void rotate(float angle) {
-  camera.rotate(angle);
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+
 }
 
 void update() {

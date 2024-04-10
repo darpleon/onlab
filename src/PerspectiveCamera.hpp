@@ -1,18 +1,26 @@
 #pragma once
 
+#include "Camera.hpp"
+#include "Listener.hpp"
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/vector_float3.hpp>
 
-class PerspectiveCamera {
+class PerspectiveCamera : public CameraBase, public Listener {
 public:
-  glm::mat4 getMatrix();
-  void setAspect(float a);
-  void rotate(float angle);
+  virtual glm::mat4 getMatrix() override;
+  void rotate(float angle, glm::vec3 axis);
+
+  virtual bool mouse_button_pressed(int button, glm::vec2 position) override;
+
+  virtual bool mouse_button_released(int button, glm::vec2 position) override;
+
+  virtual bool cursor_position_changed(glm::vec2 position) override;
 
 private:
-  glm::vec3 pos{0.0f, 0.0f, -2.0f};
-  glm::vec3 lookAt{0.0f, 0.0f, 0.0f};
-  float aspect = 1.0f;
+  float fovY = M_PIf / 2.0f;
+  float nearZ = 0.1f;
+  float farZ = 10.0f;
 
-  glm::vec3 up{0.0f, 1.0f, 0.0f};
+  bool dragging = false;
+  glm::vec2 previous_position{};
 };

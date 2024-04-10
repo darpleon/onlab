@@ -48,7 +48,7 @@ int main()
         Graphics::draw();
         glfwSwapBuffers(window);
         glfwPollEvents();
-        Context::rotate(0.01f);
+        // Context::rotate(0.01f);
         Context::update();
     }
 
