@@ -2,6 +2,7 @@
 // #include "BSpline.hpp"
 #include "Bernstein.hpp"
 #include "PHPlanarQuintic.hpp"
+#include "PHSpatialQuintic.hpp"
 #include "Polynomial.hpp"
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/vec2.hpp>
@@ -48,6 +49,19 @@ namespace Graphics {
     void draw() override;
   };
 
+  class GLObject3D : Drawable {
+    unsigned int VAO, VBO;
+    std::vector<glm::vec3> vertices;
+    unsigned int mode;
+    unsigned int width;
+    glm::vec3 color;
+
+  public:
+    GLObject3D();
+    GLObject3D(unsigned int mode, glm::vec3 color, unsigned int size);
+    void draw() override;
+    void setVertices(const std::vector<glm::vec3>& v);
+  };  
 
   class BernsteinView : public Drawable {
     GLObject curve;
@@ -71,6 +85,28 @@ namespace Graphics {
     GLObject lines;
   };
 
+  class ControlPolygonView3D : public Drawable {
+  public:
+    ControlPolygonView3D(std::vector<glm::vec3> ctrl);
+    void draw() override;
+
+    std::vector<glm::vec3> ctrl;
+  private:
+    GLObject3D points;
+    GLObject3D lines;
+  };
+
+  class QuatBernsteinView : public Drawable {
+    GLObject3D curve;
+    GLObject3D c_points;
+    GLObject3D c_polygon;
+    Bernstein<quat>* bernstein;
+  
+  public:
+    QuatBernsteinView(Bernstein<quat>* bernstein);
+    void draw() override;
+  };
+
   class PHPlanarQuinticView : public Drawable {
     GLObject curve;
     GLObject offset;
@@ -79,6 +115,13 @@ namespace Graphics {
 
   public:
     PHPlanarQuinticView(PHPlanarQuintic* ph);
+    void draw() override;
+  };
+
+  class AxisView : public Drawable {
+    GLObject3D xAxis, yAxis, zAxis;
+  public:
+    AxisView();
     void draw() override;
   };
 

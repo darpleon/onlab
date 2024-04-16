@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Listener.hpp"
+#include "Controller.hpp"
 #include <GLFW/glfw3.h>
 namespace Context {
 
@@ -13,7 +13,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 void processInput(GLFWwindow *window);
 
-void add_listener(Listener* listener);
+void add_listener(Controller* listener);
 
 void update();
 

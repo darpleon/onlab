@@ -1,11 +1,11 @@
 #pragma once
 
 #include "Camera.hpp"
-#include "Listener.hpp"
+#include "Controller.hpp"
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/vector_float3.hpp>
 
-class PerspectiveCamera : public CameraBase, public Listener {
+class PerspectiveCamera : public CameraBase, public Controller {
 public:
   virtual glm::mat4 getMatrix() override;
   void rotate(float angle, glm::vec3 axis);

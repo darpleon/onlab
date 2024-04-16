@@ -44,12 +44,10 @@ public:
   T evaluate(P t)
   {
     std::vector<T> coeffs = ctrl;
-    // std::cout << ctrl.size() << "\n";
     for (size_t degree = ctrl.size() - 1; degree != 0; degree--)
     {
       for (size_t j = 0; j < degree; j++)
       {
-	// std::cout << std::format("degree: {} | j: {}\n", degree, j);
 	coeffs[j] = (static_cast<P>(1) - t) * coeffs[j] + t * coeffs[j + 1];
       }
     }

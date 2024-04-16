@@ -10,7 +10,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include "Context.hpp"
-#include "Listener.hpp"
+#include "Controller.hpp"
 #include "PerspectiveCamera.hpp"
 
 namespace Context {
@@ -82,10 +82,10 @@ GLFWwindow* init()
     return window;
 }
 
-std::vector<Listener*> listeners;
-std::vector<Listener*> release_listeners;
+std::vector<Controller*> listeners;
+std::vector<Controller*> release_listeners;
 
-void add_listener(Listener* listener)
+void add_listener(Controller* listener)
 {
   listeners.push_back(listener);
 }
@@ -117,6 +117,12 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
   glm::vec2 pos{x, y};
   if (action == GLFW_PRESS) {
     camera.mouse_button_pressed(button, pos);
+    if (button == GLFW_MOUSE_BUTTON_LEFT) {
+      int width, height;
+      glfwGetWindowSize(window, &width, &height);
+      std::cout << std::format("window width: {} | height: {}\n", width, height);
+      std::cout << std::format("clicked: {}, {}\n", xd, yd);
+    }
     // for (Listener* listener : listeners)
     // {
     //   if (listener->mouse_button_pressed(button, position))

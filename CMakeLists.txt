@@ -11,6 +11,8 @@ add_executable(
   src/glad.c
   src/PHDemo.cpp
   src/PerspectiveCamera.cpp
+  src/PHSpatialQuintic.cpp
+  src/PHSpatialController.cpp
 )
 include_directories(src)
 target_link_libraries(main glfw)

@@ -1,10 +1,10 @@
 #pragma once
 
 #include "Graphics.hpp"
-#include "Listener.hpp"
+#include "Controller.hpp"
 #include "PHPlanarQuintic.hpp"
 
-class PHDemo : public Listener, public Graphics::Drawable{
+class PHDemo : public Controller, public Graphics::Drawable{
 public:
   PHDemo(std::array<glm::vec2, 4> ctrl);
 
